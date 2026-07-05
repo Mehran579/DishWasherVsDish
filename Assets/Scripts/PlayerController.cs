@@ -1,13 +1,9 @@
 using System;
+using TMPro;
 using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.AdaptivePerformance;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,6 +19,8 @@ public class PlayerController : MonoBehaviour
     Vector2 movement;
     bool ishooting;
     public GameObject bullet;
+    public int points;
+    public TMP_Text soapcount;
     public void Move(InputAction.CallbackContext context)
     {
         movement = context.ReadValue<Vector2>();
@@ -55,11 +53,21 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        //Vector2 dir = tolookat.position - transform.position;
-        //transform.up = dir;
-
         dir = tolookat.position - transform.position;
         angle = MathF.Atan2(dir.y,dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0,0,angle - 90f));
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("enemy"))
+        {
+            Debug.Log("Player hit by enemy");
+        }
+        if (collision.CompareTag("point"))
+        {
+            points += 1;
+            Destroy(collision.gameObject);
+            soapcount.text = "Soap Points: " + points.ToString();
+        }
     }
 }

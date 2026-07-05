@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-
+using TMPro;
 public class enemyspawner : MonoBehaviour
 {
     public GameObject[] wave1;
@@ -12,6 +12,9 @@ public class enemyspawner : MonoBehaviour
     public GameObject[] wave4;
     public int wave4creds;
     public int currentwave = 1;
+    public GameObject player;
+    public int numberofenemies;
+    public TMP_Text enemiesnumber;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,16 +22,24 @@ public class enemyspawner : MonoBehaviour
     }
 
     // Update is called once per frame
-    
-    
-    
+
+    public void Update()
+    {
+        enemiesnumber.text = "Enemies: " + numberofenemies.ToString();
+        
+    }
+
     IEnumerator spawncooldownwave1()
     {
+        yield return new WaitForSeconds(2.5f);
         while (currentwave == 1)
         {
-        GameObject enemyprefab = wave1[Random.Range(0, wave1.Length)];
-        GameObject enemy = Instantiate(enemyprefab,new Vector2(Random.Range(-52.9f,52.9f),Random.Range(-29.8f,29.8f)),Quaternion.identity);
-        enemy.name = enemyprefab.name;
+            GameObject enemyprefab = wave1[Random.Range(0, wave1.Length)];
+            Vector2 randomspawnpoint = new Vector2(Random.Range(-52.9f, 52.9f), Random.Range(-29.8f, 29.8f));
+            if (Vector2.Distance(randomspawnpoint, player.transform.position) <= 4f) continue;
+            GameObject enemy = Instantiate(enemyprefab, randomspawnpoint, Quaternion.identity);
+            enemy.name = enemyprefab.name;
+            numberofenemies++;
         if (enemy.gameObject.name == "enemy1" )
         {
             wave1creds -= 1;
@@ -40,6 +51,7 @@ public class enemyspawner : MonoBehaviour
             {
                 currentwave = 2;
                 StartCoroutine(spawncooldownwave2());
+                yield break;
             }
         yield return new WaitForSeconds(1);
 
@@ -48,13 +60,17 @@ public class enemyspawner : MonoBehaviour
 
     IEnumerator spawncooldownwave2()
     {
+        yield return new WaitForSeconds(8f);
         while (currentwave == 2)
         {
 
         GameObject enemyprefab = wave2[Random.Range(0, wave2.Length)];
-        GameObject enemy = Instantiate(enemyprefab, new Vector2(Random.Range(-52.9f, 52.9f), Random.Range(-29.8f, 29.8f)), Quaternion.identity);
-        enemy.name = enemyprefab.name;
-        if (enemy.gameObject.name == "enemy1")
+            Vector2 randomspawnpoint = new Vector2(Random.Range(-52.9f, 52.9f), Random.Range(-29.8f, 29.8f));
+            if (Vector2.Distance(randomspawnpoint, player.transform.position) <= 4f) continue;
+            GameObject enemy = Instantiate(enemyprefab, randomspawnpoint, Quaternion.identity);
+            enemy.name = enemyprefab.name;
+            numberofenemies++;
+            if (enemy.gameObject.name == "enemy1")
         {
             wave2creds -= 1;
         }
@@ -72,6 +88,7 @@ public class enemyspawner : MonoBehaviour
         {
             currentwave = 3;
             StartCoroutine(spawncooldownwave3());
+                yield break;
         }
         yield return new WaitForSeconds(0.7f);
         }
@@ -79,12 +96,16 @@ public class enemyspawner : MonoBehaviour
 
     IEnumerator spawncooldownwave3()
     {
+        yield return new WaitForSeconds(12f);
         while (currentwave == 3)
         {
 
             GameObject enemyprefab = wave3[Random.Range(0, wave3.Length)];
-            GameObject enemy = Instantiate(enemyprefab, new Vector2(Random.Range(-52.9f, 52.9f), Random.Range(-29.8f, 29.8f)), Quaternion.identity);
+            Vector2 randomspawnpoint = new Vector2(Random.Range(-52.9f, 52.9f), Random.Range(-29.8f, 29.8f));
+            if (Vector2.Distance(randomspawnpoint, player.transform.position) <= 4f) continue;
+            GameObject enemy = Instantiate(enemyprefab, randomspawnpoint, Quaternion.identity);
             enemy.name = enemyprefab.name;
+            numberofenemies++;
             if (enemy.gameObject.name == "enemy1")
             {
                 wave3creds -= 1;
@@ -111,6 +132,7 @@ public class enemyspawner : MonoBehaviour
             {
                 currentwave = 4;
                 StartCoroutine(spawncooldownwave4());
+                yield break;
             }
 
             yield return new WaitForSeconds(0.5f);
@@ -118,11 +140,15 @@ public class enemyspawner : MonoBehaviour
     }
     IEnumerator spawncooldownwave4()
     {
+        yield return new WaitForSeconds(15f);
         while (currentwave == 4) 
         {
             GameObject enemyprefab = wave4[Random.Range(0, wave4.Length)];
-            GameObject enemy = Instantiate(enemyprefab, new Vector2(Random.Range(-52.9f, 52.9f), Random.Range(-29.8f, 29.8f)), Quaternion.identity);
+            Vector2 randomspawnpoint = new Vector2(Random.Range(-52.9f, 52.9f), Random.Range(-29.8f, 29.8f));
+            if (Vector2.Distance(randomspawnpoint, player.transform.position) <= 4f) continue;
+            GameObject enemy = Instantiate(enemyprefab, randomspawnpoint, Quaternion.identity);
             enemy.name = enemyprefab.name;
+            numberofenemies++;
             if (enemy.gameObject.name == "enemy1")
             {
                 wave4creds -= 1;
@@ -154,7 +180,7 @@ public class enemyspawner : MonoBehaviour
             if (wave4creds <= 0)
             { 
                 currentwave = 5;
-                Debug.Log("Game Finished");
+                //Debug.Log("Game Finished");
             }
 
             yield return new WaitForSeconds(0.2f);

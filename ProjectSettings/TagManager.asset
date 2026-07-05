@@ -7,6 +7,8 @@ TagManager:
   - enemy
   - Undefined
   - bullet
+  - spawner
+  - point
   layers:
   - Default
   - TransparentFX

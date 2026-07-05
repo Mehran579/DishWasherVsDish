@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6384220726853385423}
   - component: {fileID: 7859424329556363028}
   - component: {fileID: 5774799870017327817}
+  - component: {fileID: 747587351187436174}
   m_Layer: 0
   m_Name: enemy7
   m_TagString: enemy
@@ -178,3 +179,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &747587351187436174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4051451743156314078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 872b387ba737bcd4db1818d2d235d48f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::enemy1script
+  Player: {fileID: 0}
+  enemyspeed: 4
+  enemyhealth: 7
+  dropchance: 6
+  drop: {fileID: 5702478662370784855, guid: 8661e2aa6506a3e4084800651e516d80, type: 3}

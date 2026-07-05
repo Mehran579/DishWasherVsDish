@@ -3,9 +3,11 @@ using UnityEngine;
 public class enemy1script : MonoBehaviour
 {
     public GameObject Player;
-    public Rigidbody2D enemyrb;
-    public float enemyspeed = 5f;
-    public int enemyhealth = 7;
+    Rigidbody2D enemyrb;
+    public float enemyspeed;
+    public int enemyhealth;
+    public int dropchance;
+    public GameObject drop;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -14,19 +16,30 @@ public class enemy1script : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         //transform.position = Vector2.MoveTowards(transform.position , Player.transform.position,enemyspeed * Time.fixedDeltaTime);
         if(enemyhealth <= 0)
         {
             Destroy(gameObject);
+            Debug.Log("enemy killed");
+            GameObject.FindGameObjectWithTag("spawner").GetComponent<enemyspawner>().numberofenemies--;
+            if (Random.Range(1,11) <= dropchance)
+            {
+                Debug.Log("spawn point");
+                Instantiate(drop, transform.position, Quaternion.identity);
+            }
         }
-        //enemyrb.MovePosition(Player.transform.position);
+    }
+    private void FixedUpdate()
+    {
+        enemyrb.MovePosition(Vector2.MoveTowards(transform.position, Player.transform.position, enemyspeed * 0.01f));
+        
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.tag);
-        if (collision.gameObject.CompareTag("bullet"))
+/*        Debug.Log(collision.gameObject.tag);
+*/        if (collision.gameObject.CompareTag("bullet"))
         {
             enemyhealth -= 1;
         }
