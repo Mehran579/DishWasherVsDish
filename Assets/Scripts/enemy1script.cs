@@ -5,7 +5,7 @@ public class enemy1script : MonoBehaviour
     public GameObject Player;
     Rigidbody2D enemyrb;
     public float enemyspeed;
-    public int enemyhealth;
+    public float enemyhealth;
     public int dropchance;
     public GameObject drop;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -41,7 +41,7 @@ public class enemy1script : MonoBehaviour
 /*        Debug.Log(collision.gameObject.tag);
 */        if (collision.gameObject.CompareTag("bullet"))
         {
-            enemyhealth -= 1;
+            enemyhealth -= collision.gameObject.GetComponent<bullet_behaviour>().damage;
         }
     }
     
