@@ -12,6 +12,7 @@ TagManager:
   - powerupmanager
   - soap shield
   - enemy bullet
+  - puddle
   layers:
   - Default
   - TransparentFX

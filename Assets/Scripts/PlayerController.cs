@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -73,6 +74,10 @@ public class PlayerController : MonoBehaviour
         dir = tolookat.position - transform.position;
         angle = MathF.Atan2(dir.y,dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0,0,angle - 90f));
+        if(Health == 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -82,7 +87,7 @@ public class PlayerController : MonoBehaviour
             soapcount.text = "Soap Points: " + points;
             Destroy(collision.gameObject);
         }
-        if(collision.CompareTag("enemy bullet"))
+        if(collision.CompareTag("enemy bullet")||collision.CompareTag("puddle"))
         {
             Health -= 1;
             StartCoroutine(Invincible());

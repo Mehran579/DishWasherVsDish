@@ -15,6 +15,7 @@ public class enemy1script : MonoBehaviour
     bool canshoot = true;
     bool candash = true;
     bool isdashing;
+    public bool isinpuddle;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,11 +39,20 @@ public class enemy1script : MonoBehaviour
             }
         }
     }
+    void stoppuddle()
+    {
+        isinpuddle = false;
+    }
     private void FixedUpdate()
     {
-        if (isknockedback && isdashing)
+        if (isknockedback || isdashing)
         {
             return;
+        }
+        if(isinpuddle) 
+        {
+            Invoke(nameof(stoppuddle),0.5f);
+            return; 
         }
         else
         {
@@ -55,30 +65,46 @@ public class enemy1script : MonoBehaviour
                 enemyrb.MovePosition(Vector2.MoveTowards(transform.position, Player.transform.position, enemyspeed * 0.01f));
             }
         }
-        if(name == "enemy5")
+        if (name == "enemy5")
         {
-            if(Vector2.Distance(transform.position,Player.transform.position) <= 8 && Vector2.Distance(transform.position, Player.transform.position) >= 2 && candash)
+            if (Vector2.Distance(transform.position, Player.transform.position) <= 8 && Vector2.Distance(transform.position, Player.transform.position) >= 2 && candash)
             {
                 StartCoroutine(dash());
             }
-        }else if(name == "enemy7")
+        }
+        else if (name == "enemy7")
         {
             if (canshoot)
             {
-                StartCoroutine(Shootcooldown());
-                
+                StartCoroutine(Shootcooldown(3.5f));
+
             }
         }
+        else if (name == "enemy8") 
+        {
+            if (canshoot)
+            {
+                StartCoroutine(Shootcooldown(6f));
+            }
+        }
+
     }
-    IEnumerator Shootcooldown()
+    IEnumerator Shootcooldown(float cooldown)
     {
         canshoot = false;
-        GameObject _bullet = Instantiate(enemybullet, transform.position, Quaternion.identity);
+        if(name == "enemy7")
+        {
+            GameObject _bullet = Instantiate(enemybullet, transform.position, Quaternion.identity);
         Rigidbody2D bulletrb = _bullet.GetComponent<Rigidbody2D>();
         Vector2 bulletdir = (Player.transform.position - transform.position).normalized;
         Destroy(_bullet, 3f);
         bulletrb.linearVelocity = bulletdir * 10f;
-        yield return new WaitForSeconds(3.5f);
+        }else if(name == "enemy8")
+        {
+            GameObject _bullet = Instantiate(enemybullet, transform.position + new Vector3(0,1,0), Quaternion.identity);
+            Destroy(_bullet, 0.45f);
+        }
+        yield return new WaitForSeconds(cooldown);
         canshoot = true;
     }
     IEnumerator dash()
@@ -89,7 +115,7 @@ public class enemy1script : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         enemyspeed = 8;
         isdashing = false;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(7f);
         candash = true;
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -107,6 +133,11 @@ public class enemy1script : MonoBehaviour
         {
             enemyhealth -= 1;
             StartCoroutine(knokbackroutine());
+        }
+        if (collision.CompareTag("puddle")&&name!= "enemy8")
+        {
+            isinpuddle = true;
+            enemyrb.AddForce((transform.position - collision.transform.position).normalized * 5f, ForceMode2D.Impulse);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
