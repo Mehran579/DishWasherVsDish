@@ -192,7 +192,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemy1script
   Player: {fileID: 0}
+  isknockedback: 0
   enemyspeed: 7
   enemyhealth: 7
   dropchance: 6
   drop: {fileID: 5702478662370784855, guid: 8661e2aa6506a3e4084800651e516d80, type: 3}
+  enemybullet: {fileID: 2309332546849779008, guid: 896f780c71ae4814e98bf19aced6989c, type: 3}

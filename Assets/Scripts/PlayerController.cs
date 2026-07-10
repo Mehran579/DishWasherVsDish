@@ -82,6 +82,12 @@ public class PlayerController : MonoBehaviour
             soapcount.text = "Soap Points: " + points;
             Destroy(collision.gameObject);
         }
+        if(collision.CompareTag("enemy bullet"))
+        {
+            Health -= 1;
+            StartCoroutine(Invincible());
+            StartCoroutine(spriteblink());
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {

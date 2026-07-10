@@ -11,6 +11,10 @@ public class enemy1script : MonoBehaviour
     public float enemyhealth;
     public int dropchance;
     public GameObject drop;
+    public GameObject enemybullet;
+    bool canshoot = true;
+    bool candash = true;
+    bool isdashing;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -36,7 +40,7 @@ public class enemy1script : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (isknockedback)
+        if (isknockedback && isdashing)
         {
             return;
         }
@@ -51,7 +55,42 @@ public class enemy1script : MonoBehaviour
                 enemyrb.MovePosition(Vector2.MoveTowards(transform.position, Player.transform.position, enemyspeed * 0.01f));
             }
         }
-        
+        if(name == "enemy5")
+        {
+            if(Vector2.Distance(transform.position,Player.transform.position) <= 8 && Vector2.Distance(transform.position, Player.transform.position) >= 2 && candash)
+            {
+                StartCoroutine(dash());
+            }
+        }else if(name == "enemy7")
+        {
+            if (canshoot)
+            {
+                StartCoroutine(Shootcooldown());
+                
+            }
+        }
+    }
+    IEnumerator Shootcooldown()
+    {
+        canshoot = false;
+        GameObject _bullet = Instantiate(enemybullet, transform.position, Quaternion.identity);
+        Rigidbody2D bulletrb = _bullet.GetComponent<Rigidbody2D>();
+        Vector2 bulletdir = (Player.transform.position - transform.position).normalized;
+        Destroy(_bullet, 3f);
+        bulletrb.linearVelocity = bulletdir * 10f;
+        yield return new WaitForSeconds(3.5f);
+        canshoot = true;
+    }
+    IEnumerator dash()
+    {
+        candash = false;
+        isdashing = true;
+        enemyspeed = 80;
+        yield return new WaitForSeconds(0.1f);
+        enemyspeed = 8;
+        isdashing = false;
+        yield return new WaitForSeconds(5f);
+        candash = true;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

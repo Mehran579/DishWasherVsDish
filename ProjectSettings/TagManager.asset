@@ -11,6 +11,7 @@ TagManager:
   - point
   - powerupmanager
   - soap shield
+  - enemy bullet
   layers:
   - Default
   - TransparentFX
