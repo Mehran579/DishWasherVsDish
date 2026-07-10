@@ -10,6 +10,7 @@ public class powerupmanager : MonoBehaviour
     public PlayerController playercontroller;
     public bool piercingobtained;
     bool pointsfollowing;
+    public bool stunbullets;
     public GameObject bullet;
     public GameObject shield;
     //public enemy1script enemy1Script;
@@ -20,7 +21,10 @@ public class powerupmanager : MonoBehaviour
     public bool p4;
     public bool p5;
     public bool p6;
-
+    private void Start()
+    {
+        bullet.GetComponent<SpriteRenderer>().color = Color.white;
+    }
     private void Update()
     {
         if (!p1 && GameObject.FindWithTag("Player").GetComponent<PlayerController>().points == 1)
@@ -65,9 +69,9 @@ public class powerupmanager : MonoBehaviour
             if (!powerupstoshow.Contains(powerups[randomindex]))
             {
                 if (piercingobtained && randomindex == 7) continue;
-                if (gameObject.activeSelf == true && randomindex == 8) continue;
+                if (shield.activeSelf == true && randomindex == 8) continue;
                 if (pointsfollowing&& randomindex == 5) continue;
-                if (randomindex == 2) continue;
+                if (stunbullets && randomindex == 2) continue;  
                 powerupstoshow.Add(powerups[randomindex]);
             }
         }
@@ -109,7 +113,6 @@ public class powerupmanager : MonoBehaviour
     }
     public void damageincrease()
     {
-        //GameObject.FindWithTag("bullet").GetComponent<bullet_behaviour>().damage += 0.5f;
         bullet.GetComponent<bullet_behaviour>().damage += 0.5f;
         resumegame();
     }
@@ -140,10 +143,12 @@ public class powerupmanager : MonoBehaviour
         resumegame();
         //StartCoroutine(followplayer());
     }
-    //IEnumerator followplayer()
-    //{
-    //    yield return null;
-    //}
+    public void stunbullet()
+    {
+        stunbullets = true;
+        bullet.GetComponent<SpriteRenderer>().color = Color.orange;
+        resumegame();
+    }
     private void FixedUpdate()
     {
         if (pointsfollowing)

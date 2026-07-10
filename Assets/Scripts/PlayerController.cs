@@ -5,9 +5,11 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
+    public SpriteRenderer spriteRenderer;
     public TMP_Text text;
     public Slider slider;
     public float Health = 10f;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     public GameObject bullet;
     public int points;
     public TMP_Text soapcount;
+    public bool isvulnerable;
     private void Start()
     {
         FullHealth = Health;
@@ -73,15 +76,42 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("enemy"))
-        {
-            Debug.Log("Player hit by enemy");
-        }
         if (collision.CompareTag("point"))
         {
             points += 1;
+            soapcount.text = "Soap Points: " + points;
             Destroy(collision.gameObject);
-            soapcount.text = "Soap Points: " + points.ToString();
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("enemy") && !isvulnerable)
+        {
+            Health -= 1;
+            StartCoroutine(Invincible());
+            StartCoroutine(spriteblink());
+        }
+    }
+    IEnumerator Invincible()
+    {
+        isvulnerable = true;
+        GetComponent<Collider2D>().enabled = false;
+        yield return new WaitForSeconds(0.8f);
+        isvulnerable = false;
+        GetComponent<Collider2D>().enabled = true;
+    }
+    IEnumerator spriteblink()
+    {
+        while (isvulnerable)
+        {
+            Color temp = spriteRenderer.color;
+            temp.a = 0.1f;
+            spriteRenderer.color = temp;
+            yield return new WaitForSeconds(0.1f);
+            Color temp2 = spriteRenderer.color;
+            temp2.a = 1f;
+            spriteRenderer.color = temp2;
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

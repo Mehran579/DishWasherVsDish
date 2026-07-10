@@ -4,6 +4,9 @@ using UnityEngine;
 public class bullet_behaviour : MonoBehaviour
 {
     public float damage =1f;
+    private void Start()
+    {
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("enemy"))

@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class soap_behaviour : MonoBehaviour
 {
-    public float shield_speed;
+    public float shieldRotationSpeed;
     void Update()
     {
         transform.position = GameObject.FindWithTag("Player").transform.position;
-        transform.Rotate(0, 0, shield_speed * Time.deltaTime);
+        transform.Rotate(0, 0, shieldRotationSpeed * Time.deltaTime);
     }
 }
