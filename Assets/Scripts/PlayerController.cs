@@ -31,6 +31,9 @@ public class PlayerController : MonoBehaviour
     public int points;
     public TMP_Text soapcount;
     public bool isvulnerable;
+    bool dead;
+    public GameObject win;
+    public GameObject loose;
     private void Start()
     {
         FullHealth = Health;
@@ -74,8 +77,28 @@ public class PlayerController : MonoBehaviour
         dir = tolookat.position - transform.position;
         angle = MathF.Atan2(dir.y,dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0,0,angle - 90f));
-        if(Health == 0)
+        if(Health == 0&&!dead)
         {
+            StartCoroutine(restarter(false));
+            dead = true;
+        }
+    }
+    public IEnumerator restarter(bool winorloss)
+    {
+        if (winorloss)
+        {
+            Time.timeScale = 0;
+            win.SetActive(true);
+            yield return new WaitForSecondsRealtime(1.5f);
+            Time.timeScale = 1;
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            Time.timeScale = 0;
+            loose.SetActive(true);
+            yield return new WaitForSecondsRealtime(1.5f);
+            Time.timeScale = 1;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }

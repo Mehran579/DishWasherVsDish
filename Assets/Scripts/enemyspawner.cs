@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 public class enemyspawner : MonoBehaviour
 {
+    bool checkdead;
     public GameObject[] wave1;
     public int wave1creds;
     public GameObject[] wave2;
@@ -26,7 +27,10 @@ public class enemyspawner : MonoBehaviour
     public void Update()
     {
         enemiesnumber.text = "Enemies: " + numberofenemies.ToString();
-        
+        if(checkdead&&numberofenemies== 0)
+        {
+            GameObject.FindWithTag("Player").GetComponent<PlayerController>().StartCoroutine(GameObject.FindWithTag("Player").GetComponent<PlayerController>().restarter(true));
+        }
     }
 
     IEnumerator spawncooldownwave1()
@@ -185,5 +189,6 @@ public class enemyspawner : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
+        checkdead = true;
     }
 }
