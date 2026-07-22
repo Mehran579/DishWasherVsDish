@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class bullet_behaviour : MonoBehaviour
 {
-    public float damage =1f;
+    public float damage;
     private void Start()
     {
+        //damage = 1f;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
